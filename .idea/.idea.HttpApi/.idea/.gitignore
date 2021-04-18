@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/projectSettingsUpdater.xml
+/contentModel.xml
+/.idea.HttpApi.iml
+# Datasource local storage ignored files
+/../../../../../../../../:\Users\cirst\RiderProjects\HttpApi\.idea\.idea.HttpApi\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
