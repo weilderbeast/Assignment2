@@ -13,7 +13,6 @@ namespace HttpApi.Controllers
     public class AdultsController : ControllerBase
     {
         private IAdultsRepo _adultsRepo;
-        private readonly FileContext _FileContext = new FileContext();
 
         public AdultsController(IAdultsRepo adultsRepo)
         {
@@ -23,32 +22,8 @@ namespace HttpApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IList<Adult>>> Get()
         {
-            try
-            {
-                var adults = _FileContext.Adults;
-                foreach (var adult in adults)
-                {
-                    Console.WriteLine("writing " + adult.FirstName + " to db");
-                    try
-                    {
-                        await _adultsRepo.AddAsync(adult);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
-                }
-                
-                return Ok(adults);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
-            return StatusCode(500, "error");
-            // var adults = await _adultsRepo.GetAllAsync();
-            // return adults != null ? Ok(adults) : StatusCode(500, "something went wrong");
+            var adults = await _adultsRepo.GetAllAsync();
+            return adults != null ? Ok(adults) : StatusCode(500, "something went wrong");
         }
 
         [HttpPost]

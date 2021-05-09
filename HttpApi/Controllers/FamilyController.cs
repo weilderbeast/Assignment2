@@ -12,7 +12,6 @@ namespace HttpApi.Controllers
     [Route("api/[controller]")]
     public class FamilyController : ControllerBase
     {
-        private readonly FileContext _FileContext = new FileContext();
         private IFamilyRepo _familyRepo;
 
         public FamilyController(IFamilyRepo familyRepo)
@@ -23,28 +22,8 @@ namespace HttpApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IList<Family>>> Get()
         {
-            try
-            {
-                var families = _FileContext.Families;
-                foreach (var family in families)
-                {
-                    Console.WriteLine("adding " + family.StreetName + " to db");
-                    await _familyRepo.AddAsync(family);
-                }
-            
-                return Ok(families);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            
-            
-            return StatusCode(500, "error");
-            
-            
-            // var families = await _familyRepo.GetAllAsync();
-            // return families != null ? Ok(families) : StatusCode(500, "something went wrong");
+            var families = await _familyRepo.GetAllAsync();
+            return families != null ? Ok(families) : StatusCode(500, "something went wrong");
         }
 
         [HttpPost]
