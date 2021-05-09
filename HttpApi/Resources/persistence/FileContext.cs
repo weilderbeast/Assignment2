@@ -12,9 +12,9 @@ namespace HttpApi.Resources
         public IList<Adult> Adults { get; private set; }
         public IList<User> Users { get; private set; }
 
-        private readonly string familiesFile = "Resources/families.json";
-        private readonly string adultsFile = "Resources/adults.json";
-        private readonly string usersFile = "Resources/users.json";
+        private readonly string familiesFile = "Resources/persistence/families.json";
+        private readonly string adultsFile = "Resources/persistence/adults.json";
+        private readonly string usersFile = "Resources/persistence/users.json";
 
         public FileContext()
         {

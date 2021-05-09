@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Assignment1.Data.Models;
 using HttpApi.Controllers;
 using HttpApi.Resources;
+using HttpApi.Resources.persistence.repos;
+using HttpApi.Resources.persistence.repos.impl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,9 +32,17 @@ namespace HttpApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "RestServer", Version = "v1"});
+            });
             services.AddScoped<FamilyController>();
             services.AddScoped<AdultsController>();
             services.AddScoped<FileContext>();
+            services.AddScoped<IAdultsRepo, AdultsRepo>();
+            services.AddScoped<IFamilyRepo, FamilyRepo>();
+            services.AddScoped<IJobsRepo, JobsRepo>();
+            services.AddScoped<IUsersRepo, UsersRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
