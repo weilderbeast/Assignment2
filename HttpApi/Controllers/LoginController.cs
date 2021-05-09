@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Assignment1.Data.Models;
 using HttpApi.Resources;
+using HttpApi.Resources.persistence.repos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HttpApi.Controllers
@@ -11,27 +12,26 @@ namespace HttpApi.Controllers
     [Route("/api/[controller]")]
     public class LoginController : ControllerBase
     {
-        private readonly FileContext _FileContext = new FileContext();
+        private IUsersRepo _repo;
+        
+        public LoginController(IUsersRepo repo)
+        {
+            _repo = repo;
+        }
         
         [HttpPost]
         public async Task<ActionResult<bool>> Login([FromBody] User loggingUser)
         {
-            var users = _FileContext.Users;
-            var user = users.FirstOrDefault(user => user.Username.Equals(loggingUser.Username));
+            try
+            {
+                var response = await _repo.ValidateAsync(loggingUser.Username, loggingUser.Password);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(400, e.Message);
+            }
             
-            if (user == null)
-            {
-                Console.WriteLine("user is null");
-                return StatusCode(404, "User not found");
-            }
-            if (!user.Password.Equals(loggingUser.Password))
-            {
-                Console.WriteLine("password incorrect");
-                return StatusCode(404, "Incorrect password");
-            }
-
-            Console.WriteLine("Returned "+ user.Username);
-            return Ok(user);
         }
     }
 }
